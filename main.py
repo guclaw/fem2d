@@ -2,11 +2,11 @@ from anastruct import SystemElements
 
 # Data
 l0 = 2  # m
-l = 4  # m
-number_of_pipes = 2
+l = 10  # m
+number_of_pipes = 3
 n = number_of_pipes + 1
 
-q = -50
+q = -10
 l_pipe = 6
 
 hinge_offset = -3
@@ -48,8 +48,8 @@ ss.solve()
 
 # Get visual results.
 ss.show_structure()
-# ss.show_reaction_force()
-ss.show_axial_force()
+ss.show_reaction_force()
+# ss.show_axial_force()
 # ss.show_shear_force()
 ss.show_bending_moment()
 ss.show_displacement()
