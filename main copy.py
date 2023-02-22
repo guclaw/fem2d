@@ -4,8 +4,8 @@ import numpy as np
 
 
 # Data
-l0 = 1.22  # m
-l = 6.2  # m
+l0 = 2  # m
+l = 6 # m
 number_of_pipes = 2
 n = number_of_pipes + 1
 
@@ -45,34 +45,38 @@ for el in ss.element_map.values():
 
 
 # skew elements
-ss.add_truss_element(location=[[l0, 0], [0, -l0]], steelsection=steelsection)
+ss.add_element(location=[[l0, 0], [0, -l0]], steelsection=steelsection, spring={1: 0})
 ss.add_support_hinged(node_id=4 + n)
 
-ss.add_truss_element(location=[[n * l + l0, 0], [n * l + 2 * l0, -l0]], steelsection=steelsection)
+ss.add_element(location=[[n * l + l0, 0], [n * l + 2 * l0, -l0]], steelsection=steelsection, spring={1: 0})
 ss.add_support_hinged(node_id=n + 5)
 
 # vertical elements
 for _ in range(1, n):
     print(_)
-    ss.add_truss_element(location=[[l0 + l * _, 0], [l0 + l * _, -l_pipe]], d1=0.3556, th=0.008)
+    ss.add_element(location=[[l0 + l * _, 0], [l0 + l * _, -l_pipe]], d1=0.3556, th=0.008, spring={1: 0})
     ss.add_support_hinged(node_id=number_of_pipes+6+_)
 
 # Solve
-ss.solve()
+# ss.solve()
+ss.solve(geometrical_non_linear=False, discretize_kwargs=dict(n=20), max_iter=1000)
 
 # Get visual results.
-ss.show_structure()
-ss.show_reaction_force()
-ss.show_axial_force()
-ss.show_shear_force()
-ss.show_bending_moment()
+# ss.show_structure()
+# ss.show_reaction_force()
+# ss.show_axial_force()
+# ss.show_shear_force()
+# ss.show_bending_moment()
 ss.show_displacement()
-for x in range(1, 10):
-    print(f'section: {ss.element_map[x].section_name}')
-    print(f'EA: {ss.element_map[x].EA}')
+# for x in range(1, 10):
+#     print(f'section: {ss.element_map[x].section_name}')
+#     print(f'EA: {ss.element_map[x].EA}')
 
 # # save
 # with open('my_structure.pkl', 'wb') as f:
 #     pickle.dump(ss, f)
 
+
+max = [ss.element_map[4].deflection]
+print(max)
 
